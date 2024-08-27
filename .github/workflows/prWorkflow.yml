@@ -23,27 +23,19 @@ jobs: # 작업 정의
             const body = pull_request.body;
 
             if (!body) {
-              // 비동기 작업을 위해 async 함수 선언
-              const closePR = async () => {
-                // PR에 코멘트 추가
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: pull_request.number,
-                  body: "해당 PR은 가이드라인을 준수하지 않아 닫아두었습니다. 가이드라인을 준수하여 다시 PR 요청을 해주세요.",
-                });
+              // PR에 코멘트 추가
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: pull_request.number,
+                body: "해당 PR은 가이드라인을 준수하지 않아 닫아두었습니다. 가이드라인을 준수하여 다시 PR 요청을 해주세요.",
+              });
 
-                // PR을 닫습니다.
-                await github.rest.pulls.update({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  pull_number: pull_request.number,
-                  state: "closed",
-                });
-              };
-
-              // 비동기 함수 호출
-              await closePR();
+              // PR을 닫습니다.
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pull_request.number,
+                state: "closed",
+              });
             }
-
-            
